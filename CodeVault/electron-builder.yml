@@ -1,0 +1,11 @@
+appId: com.example.myapp
+productName: My App
+directories:
+  output: dist
+files:
+  - dist/**
+  - public/**
+  - src/main/**
+  - package.json
+  - package-lock.json
+  - node_modules/**
