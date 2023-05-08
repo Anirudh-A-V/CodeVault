@@ -1,195 +1,158 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
+import link from '../Assets/link.svg'
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { github as syntaxStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { useParams } from 'react-router-dom';
 import { db } from '../../firebase'
 import { collection, getDocs,doc,getDoc } from 'firebase/firestore'
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-
+import { useEffect, useState } from 'react';
 
 
 
 const ViewQuestion = () => {
-
-
-
-  //function to fetch question details from firestore based on url params
-  const questionId = useParams();
-  console.log(questionId);
+  
   const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [url, setUrl] = useState('')
-  const [tags, setTags] = useState([])
-  const [notes, setNotes] = useState('')
+  const [question, setQuestion] = useState('')
   const [solution, setSolution] = useState('')
-  const [language, setLanguage] = useState('')
+  const [difficulty, setDifficulty] = useState('')
+  const [description, setDescription] = useState('')
+  const [tags, setTags] = useState([])
+  const [code, setCode] = useState('')
+  const [notes, setNotes] = useState('')
+  const [url , setUrl] = useState('')
 
-
-   const getQuestion = async () => {console.log("get question")
-      const questionRef = doc(db, "questions", questionId);
-      const docSnap = await getDoc(questionRef);
-      console.log(docSnap)
+  //fetch question details from firestore
+  const { id } = useParams()
+  useEffect(() => {
+    const getQuestion = async () => {
+      const docRef = doc(db, "questions", id);
+      const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
-        setTitle(docSnap.data().title)
-        setDescription(docSnap.data().description)
-        setUrl(docSnap.data().url)
-        setTags(docSnap.data().tags)
-        setNotes(docSnap.data().notes)
-        setSolution(docSnap.data().solution)
-        setLanguage(docSnap.data().language)
+        const data = docSnap.data()
+        setTitle(data.title)
+        setQuestion(data.question)
+        setSolution(data.solution)
+        setDescription(data.description)
+    
+        setTags(data.tags)
+        //split tags by space
+         const tag = data.tags.split(' ')
+          setTags(tag)
 
+        setCode(data.solution)
+        setNotes(data.notes)
+        setUrl(data.url)
       } else {
+        // doc.data() will be undefined in this case
         console.log("No such document!");
       }
     }
-    useEffect(() => {
-      getQuestion();
-    }, []);
+    getQuestion()
+  }, [id])
 
-  return (
-    <div className='flex flex-col items-center justify-start w-full flex-grow'>
-        <h2 className='text-2xl font-semibold text-gray-900 mt-4'>
-            Edit Question
-        </h2>
-        <p className='text-gray-400 text-center mt-2'>
-            View and edit question details.
-        </p>
-        <div className='flex flex-col items-start mt-6 w-full flex-grow overflow-y-auto'>
-            <form className='flex flex-col items-start w-full mb-10'>
-                <div className='relative mb-6 w-full'>
-                    <input
-                        type="text"
-                        className="peer m-0 block h-[58px] w-full rounded border border-solid border-neutral-300 bg-white bg-clip-padding py-4 px-3 text-base font-normal leading-tight text-neutral-600 ease-in-out placeholder:text-transparent focus:border-primary focus:bg-white focus:pt-[1.625rem] focus:pb-[0.625rem] focus:text-neutral-700 focus:shadow-te-primary focus:outline-none  [&:not(:placeholder-shown)]:pt-[1.625rem] [&:not(:placeholder-shown)]:pb-[0.625rem]"
-                        id="Title"
-                        required
-                        value={title}
-                        placeholder="Title"
-                        onChange={(e) => { 
-                            setTitle(e.target.value)
-                        }}
-                    />
-                    <label
-                        htmlFor="Title"
-                        className="pointer-events-none absolute top-0 left-0 origin-[0_0] border border-solid border-transparent py-4 px-3 text-neutral-600 transition-[opacity,_transform] duration-100 ease-in-out peer-focus:translate-x-[0.15rem] peer-focus:-translate-y-2 peer-focus:scale-[0.85] peer-focus:opacity-[0.65] peer-[:not(:placeholder-shown)]:translate-x-[0.15rem] peer-[:not(:placeholder-shown)]:-translate-y-2 peer-[:not(:placeholder-shown)]:scale-[0.85] peer-[:not(:placeholder-shown)]:opacity-[0.65] motion-reduce:transition-none"
-                    >
-                        Title
-                    </label>
-                </div>
-                <div className='relative mb-6 w-full'>
-                    <textarea
-                        className="peer m-0 block h-[150px] w-full rounded border border-solid border-neutral-300 bg-white bg-clip-padding py-4 px-3 text-base font-normal leading-tight text-neutral-600 ease-in-out placeholder:text-transparent focus:border-primary focus:bg-white focus:pt-[1.625rem] focus:pb-[0.625rem] focus:text-neutral-700 focus:shadow-te-primary focus:outline-none  [&:not(:placeholder-shown)]:pt-[1.625rem] [&:not(:placeholder-shown)]:pb-[0.625rem]"
-                        id="Description"
-                        placeholder="Description"
-                        value={description}
-                        onChange={(e) => {
-                            setDescription(e.target.value)
-                            }
-                        }
-                    />
-                    <label
-                        htmlFor="Description"
-                        className="pointer-events-none absolute top-0 left-0 origin-[0_0] border border-solid border-transparent py-4 px-3 text-neutral-600 transition-[opacity,_transform] duration-100 ease-in-out peer-focus:translate-x-[0.15rem] peer-focus:-translate-y-2 peer-focus:scale-[0.85] peer-focus:opacity-[0.65] peer-[:not(:placeholder-shown)]:translate-x-[0.15rem] peer-[:not(:placeholder-shown)]:-translate-y-2 peer-[:not(:placeholder-shown)]:scale-[0.85] peer-[:not(:placeholder-shown)]:opacity-[0.65] motion-reduce:transition-none"
-                    >
-                        Description
-                    </label>
-                </div>
-                <div className='relative mb-6 w-full'>
-                    <input
-                        type="url"
-                        className="peer m-0 block h-[58px] w-full rounded border border-solid border-neutral-300 bg-white bg-clip-padding py-4 px-3 text-base font-normal leading-tight text-neutral-600 ease-in-out placeholder:text-transparent focus:border-primary focus:bg-white focus:pt-[1.625rem] focus:pb-[0.625rem] focus:text-neutral-700 focus:shadow-te-primary focus:outline-none  [&:not(:placeholder-shown)]:pt-[1.625rem] [&:not(:placeholder-shown)]:pb-[0.625rem]"
-                        id="url"
-                        placeholder="url"
-                        value={url}
-                        onChange={(e) => { 
-                            //remove http:// from url
-                          
-                        
-                            setUrl(e.target.value)
-                        }}
-                        required
-                    />
-                    <label
-                        htmlFor="url"
-                        className="pointer-events-none absolute top-0 left-0 origin-[0_0] border border-solid border-transparent py-4 px-3 text-neutral-600 transition-[opacity,_transform] duration-100 ease-in-out peer-focus:translate-x-[0.15rem] peer-focus:-translate-y-2 peer-focus:scale-[0.85] peer-focus:opacity-[0.65] peer-[:not(:placeholder-shown)]:translate-x-[0.15rem] peer-[:not(:placeholder-shown)]:-translate-y-2 peer-[:not(:placeholder-shown)]:scale-[0.85] peer-[:not(:placeholder-shown)]:opacity-[0.65] motion-reduce:transition-none"
-                    >
-                        url
-                    </label>
-                </div>
-                <div className='relative mb-6 w-full'>
-                    <textarea
-                        className="peer m-0 block h-[300px] w-full rounded border border-solid border-neutral-300 bg-white bg-clip-padding py-4 px-3 text-base font-normal leading-tight text-neutral-600 ease-in-out placeholder:text-transparent focus:border-primary focus:bg-white focus:pt-[1.625rem] focus:pb-[0.625rem] focus:text-neutral-700 focus:shadow-te-primary focus:outline-none  [&:not(:placeholder-shown)]:pt-[1.625rem] [&:not(:placeholder-shown)]:pb-[0.625rem]"
-                        id="Solution"
-                        placeholder="Solution"
-                        value={solution}
-                        onChange={(e) => {
-                            setSolution(e.target.value);
-                         }}
-                    />
-                    <label
-                        htmlFor="Solution"
-                        className="pointer-events-none absolute top-0 left-0 origin-[0_0] border border-solid border-transparent py-4 px-3 text-neutral-600 transition-[opacity,_transform] duration-100 ease-in-out peer-focus:translate-x-[0.15rem] peer-focus:-translate-y-2 peer-focus:scale-[0.85] peer-focus:opacity-[0.65] peer-[:not(:placeholder-shown)]:translate-x-[0.15rem] peer-[:not(:placeholder-shown)]:-translate-y-2 peer-[:not(:placeholder-shown)]:scale-[0.85] peer-[:not(:placeholder-shown)]:opacity-[0.65] motion-reduce:transition-none"
-                    >
-                        Code
-                    </label>
-                </div>
-                <div className='relative mb-6 w-full'>
-                    <textarea
-                        className="peer m-0 block h-[300px] w-full rounded border border-solid border-neutral-300 bg-white bg-clip-padding py-4 px-3 text-base font-normal leading-tight text-neutral-600 ease-in-out placeholder:text-transparent focus:border-primary focus:bg-white focus:pt-[1.625rem] focus:pb-[0.625rem] focus:text-neutral-700 focus:shadow-te-primary focus:outline-none  [&:not(:placeholder-shown)]:pt-[1.625rem] [&:not(:placeholder-shown)]:pb-[0.625rem]"
-                        id="Notes"
-                        value={notes}
-                        placeholder="Notes"
-                        onChange={(e) => { 
-                            setNotes(e.target.value)
-                        }}
-                    />
-                    <label
-                        htmlFor="Notes"
-                        className="pointer-events-none absolute top-0 left-0 origin-[0_0] border border-solid border-transparent py-4 px-3 text-neutral-600 transition-[opacity,_transform] duration-100 ease-in-out peer-focus:translate-x-[0.15rem] peer-focus:-translate-y-2 peer-focus:scale-[0.85] peer-focus:opacity-[0.65] peer-[:not(:placeholder-shown)]:translate-x-[0.15rem] peer-[:not(:placeholder-shown)]:-translate-y-2 peer-[:not(:placeholder-shown)]:scale-[0.85] peer-[:not(:placeholder-shown)]:opacity-[0.65] motion-reduce:transition-none"
-                    >
-                        Notes
-                    </label>
-                </div>
-                <div className='relative mb-6 w-full'>
-                    <label htmlFor='language' className='text-neutral-600 mt-4'>Language</label>
-                    <select id='language' className='bg-gray-50 rounded-md px-4 py-1 mt-2 w-full'
-                    value={language} onChange={(e) => {
-                        setLanguage(e.target.value)
-                    }}>
+//     const code = `class Solution:
+//     def stringMirror(self, str : str) -> str:
+//         # v1
+//         # string_arr = []
+//         # for k in range(0, len(str)):
+//         #     substr = str[:k+1]
+//         #     string = substr + substr[::-1]
+//         #     string_arr.append(string)
+           
+//         # string_arr.sort() 
+//         # return string_arr[0]
+        
+//         #v2
+//         min_string = str + str[::-1]
+//         rev_substr = str[::-1]
+//         n = len(str)
+//         for k in range(0, n):
+//             substr = str[:k+1]
+//             string = substr + rev_substr[-k-1:]
+//             if string < min_string:
+//                 min_string = string
+           
+//         return min_string
+            
+
+
+
+// #{ 
+//  # Driver Code Starts
+// if __name__=="__main__":
+//     t = int(input())
+//     for _ in range(t):
+        
+//         str = (input())
+        
+//         obj = Solution()
+//         res = obj.stringMirror(str)
+        
+//         print(res)
+        
+
+// # } Driver Code Ends`
+
+    return (
+        <div className='flex flex-col p-4 items-start justify-start w-full flex-grow'>
+            <h2 className='text-2xl font-semibold text-gray-900'>
+                {title}
+            </h2>
+            <p className='text-gray-400 text-justify mt-2'>
+                {description}
+            </p>
+            <div className='flex justify-between items-stretch w-full'>
+                <div className='flex'>
                     
-                        <option value='javascript'>JavaScript</option>
-                        <option value='python'>Python</option>
-                        <option value='java'>Java</option>
-                        <option value='c++'>C++</option>
-                        <option value='c#'>C#</option>
-                        <option value='php'>PHP</option>
-                        <option value='ruby'>C</option>
-                    </select>
+                    {/* <p className='text-gray-800 self-center py-1 rounded-lg bg-gray-200 text-center px-3 mt-2 mr-2'>
+                        Dynamic Programming
+                    </p> */}
+                    {tags.map((tag, index) => (
+                        <p key={index} className='text-gray-800 self-center py-1 rounded-lg bg-gray-200 text-center px-3 mt-2 mr-2'>
+                            {tag}
+                        </p>
+                    ))}
                 </div>
+                <a href={url} className='flex mt-4 items-center hover:underline' target='_blank'>
+                    <p className='text-gray-800 text-sm'>
+                        Link to Question
+                    </p>
+                    <div className='w-6 h-6  flex justify-center items-center text-neutral-900 rounded-full hover:bg-neutral-200'>
+                        <img src={link} className='w-4 h-4 inline-block ' alt='link' />
+                    </div>
+                </a>
 
-                <div className='relative mb-6 w-full'>
-                    <input
-                        type="text"
-                        className="peer m-0 block h-[58px] w-full rounded border border-solid border-neutral-300 bg-white bg-clip-padding py-4 px-3 text-base font-normal leading-tight text-neutral-600 ease-in-out placeholder:text-transparent focus:border-primary focus:bg-white focus:pt-[1.625rem] focus:pb-[0.625rem] focus:text-neutral-700 focus:shadow-te-primary focus:outline-none  [&:not(:placeholder-shown)]:pt-[1.625rem] [&:not(:placeholder-shown)]:pb-[0.625rem]"
-                        id="Tags"
-                        placeholder="Tags"
-                        onChange={(e) => { 
-                            setTags(e.target.value)
-                        }}
-                    />
-                    <label
-                        htmlFor="Tags"
-                        className="pointer-events-none absolute top-0 left-0 origin-[0_0] border border-solid border-transparent py-4 px-3 text-neutral-600 transition-[opacity,_transform] duration-100 ease-in-out peer-focus:translate-x-[0.15rem] peer-focus:-translate-y-2 peer-focus:scale-[0.85] peer-focus:opacity-[0.65] peer-[:not(:placeholder-shown)]:translate-x-[0.15rem] peer-[:not(:placeholder-shown)]:-translate-y-2 peer-[:not(:placeholder-shown)]:scale-[0.85] peer-[:not(:placeholder-shown)]:opacity-[0.65] motion-reduce:transition-none"
-                    >
-                        Tags
-                    </label>
+            </div>
+            <div className='flex flex-col items-start justify-start w-full mt-6'>
+                <h3 className='text-xl font-semibold text-gray-900'>
+                    Answers
+                </h3>
+                <div className='flex flex-col items-start justify-start w-full border rounded-md mt-4 p-4 '>
+                    <h4 className='text-lg font-semibold text-gray-900'>
+                        Notes
+                    </h4>
+                    <p className='text-gray-700 text-justify mt-2'>
+                       {notes}
+                    </p>
                 </div>
-                <button className='bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600 mt-4' type='submit' >
-                    Submit
-                </button>
-            </form>
+                <div className='flex flex-col items-start justify-start w-full mt-4 '>
+                    <h4 className='text-lg font-semibold text-gray-900'>
+                        Code
+                    </h4>
+                    <div className='text-gray-700 text-justify mt-2 border w-full rounded-md p-4 '>
+                        <SyntaxHighlighter language="python" style={syntaxStyle}  showLineNumbers={true} wrapLines={true} wrapLongLines={true}>
+                            {code}
+                        </SyntaxHighlighter>
+                    </div>
+                </div>
+            </div>
+
+            {/* <div className='flex flex-col items-start justify-start w-full border rounded-md mt-4 p-4'>
+                Amet aliquip enim elit tempor sint ad magna incididunt laboris eu. Deserunt aliquip officia voluptate nisi voluptate ullamco consectetur est consequat dolor laboris. Consequat mollit sunt anim mollit ipsum aliquip quis culpa id. Proident tempor elit exercitation incididunt elit elit consequat. Elit irure anim esse fugiat excepteur sunt labore cillum Lorem proident. Deserunt exercitation elit magna aute in nostrud ea veniam adipisicing nisi.
+            </div> */}
         </div>
-    </div>
-)
+
+    )
 }
 
 export default ViewQuestion
