@@ -35,7 +35,9 @@ const Sidebar = () => {
 				</div>
 			) : (
 				<>
-					<h1 className='text-2xl font-bold mt-4'>CodeVault</h1>
+					<a href='/'>
+						<h1 className='text-2xl font-bold mt-4'>CodeVault</h1>
+					</a>
 					<input type='text' placeholder='Search' className='bg-gray-50 rounded-md px-4 py-1 mt-4 w-[90%] text-black' />
 					<div className='questions flex flex-col items-center mt-6 w-full flex-grow overflow-y-auto'>
 						<h2 className='text-xl font-semibold'>All Questions</h2>
