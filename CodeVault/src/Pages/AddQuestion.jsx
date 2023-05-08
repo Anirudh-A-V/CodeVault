@@ -68,6 +68,20 @@ const AddQuestion = () => {
                         </label>
                     </div>
                     <div className='relative mb-6 w-full'>
+                        <textarea
+                            className="peer m-0 block h-[300px] w-full rounded border border-solid border-neutral-300 bg-white bg-clip-padding py-4 px-3 text-base font-normal leading-tight text-neutral-600 ease-in-out placeholder:text-transparent focus:border-primary focus:bg-white focus:pt-[1.625rem] focus:pb-[0.625rem] focus:text-neutral-700 focus:shadow-te-primary focus:outline-none  [&:not(:placeholder-shown)]:pt-[1.625rem] [&:not(:placeholder-shown)]:pb-[0.625rem]"
+                            id="Notes"
+                            placeholder="Notes"
+                            onChange={() => { }}
+                        />
+                        <label
+                            htmlFor="Notes"
+                            className="pointer-events-none absolute top-0 left-0 origin-[0_0] border border-solid border-transparent py-4 px-3 text-neutral-600 transition-[opacity,_transform] duration-100 ease-in-out peer-focus:translate-x-[0.15rem] peer-focus:-translate-y-2 peer-focus:scale-[0.85] peer-focus:opacity-[0.65] peer-[:not(:placeholder-shown)]:translate-x-[0.15rem] peer-[:not(:placeholder-shown)]:-translate-y-2 peer-[:not(:placeholder-shown)]:scale-[0.85] peer-[:not(:placeholder-shown)]:opacity-[0.65] motion-reduce:transition-none"
+                        >
+                            Notes
+                        </label>
+                    </div>
+                    <div className='relative mb-6 w-full'>
                         <label htmlFor='language' className='text-neutral-600 mt-4'>Language</label>
                         <select id='language' className='bg-gray-50 rounded-md px-4 py-1 mt-2 w-full'>
                             <option value='javascript'>JavaScript</option>
