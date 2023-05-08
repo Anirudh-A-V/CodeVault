@@ -1,18 +1,21 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Sidebar from './Components/Sidebar'
+import Home from './Pages/Home'
+import AddQuestion from './Pages/AddQuestion'
+import ViewQuestion from './Pages/ViewQuestion'
 
 function App() {
 
   return (
     <div className='flex'>
       <Sidebar />
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<h1>Home</h1>} />
-          <Route path='/about' element={<h1>About</h1>} />
-          <Route path='/contact' element={<h1>Contact</h1>} />
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/add' element={<AddQuestion />} />
+            <Route path='/question/:id' element={<ViewQuestion />} />
+          </Routes>
+        </BrowserRouter>
     </div>
   )
 }

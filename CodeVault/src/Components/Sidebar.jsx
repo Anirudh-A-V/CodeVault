@@ -1,8 +1,6 @@
-import React from 'react'
-
 const Sidebar = () => {
   return (
-    <div className='sidebar h-screen max-h-screen min-h-screen min-w-fit w-[15%] flex flex-col items-center overflow-clip'>
+    <div className='sticky top-0 mr-5 z-0 sidebar h-screen max-h-screen min-h-screen min-w-fit w-[15%] flex flex-col items-center overflow-y-auto'>
       <h1 className='text-2xl font-bold mt-4'>CodeVault</h1>
       <input type='text' placeholder='Search' className='bg-gray-50 rounded-md px-4 py-1 mt-4 w-[90%]' />
       <div className='flex flex-col items-center mt-6 w-full flex-grow'>
@@ -19,7 +17,9 @@ const Sidebar = () => {
         </ul>
       </div>
       <div className='flex flex-col items-center mt-1 mb-8 w-full'>
-        <button className='bg-green-800 text-white px-4 py-2 rounded-md w-[90%] hover:bg-green-700'>Add Question</button>
+        <button className='bg-green-800 text-white px-4 py-2 rounded-md w-[90%] hover:bg-green-700'>
+          <a href='/add'>Add Question</a>
+        </button>
       </div>
     </div>
   )
