@@ -1,28 +1,26 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useState,useEffect } from 'react'
-import { db } from '../../firebase'
-import { getDoc,setDoc,updateDoc,doc } from 'firebase/firestore'
-
-
+import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { db } from '../Firebase/firebase'
+import { getDoc, setDoc, updateDoc, doc } from 'firebase/firestore'
 
 const AddQuestion = () => {
 
-    const [title, setTitle] = useState('')  
+    const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [url, setUrl] = useState('')
     const [notes, setNotes] = useState('')
     const [tags, setTags] = useState('')
     const [solution, setSolution] = useState('')
     const [language, setLanguage] = useState('')
-    
 
-    
-        //function to add question to firestore database
-        const addQuestion = async (e) => {
-            e.preventDefault();
-            
-            if(url){
+    const navigate = useNavigate()
+
+    //function to add question to firestore database
+    const addQuestion = async (e) => {
+        e.preventDefault();
+
+        if (url) {
             const docRef = await setDoc(doc(db, "questions", `${title}`), {
                 title: title,
                 description: description,
@@ -31,16 +29,12 @@ const AddQuestion = () => {
                 tags: tags,
                 solution: solution,
                 language: language
-            })};
+            })
+        };
 
-            console.log("Document written ");
-        }
-
-     
-
-
-
-
+        console.log("Document written ");
+        navigate('/')
+    }
 
     return (
         <div className='flex flex-col items-center justify-start w-full flex-grow'>
@@ -60,7 +54,7 @@ const AddQuestion = () => {
                             required
                             value={title}
                             placeholder="Title"
-                            onChange={(e) => { 
+                            onChange={(e) => {
                                 setTitle(e.target.value)
                             }}
                         />
@@ -79,8 +73,7 @@ const AddQuestion = () => {
                             value={description}
                             onChange={(e) => {
                                 setDescription(e.target.value)
-                                }
-                            }
+                            }}
                         />
                         <label
                             htmlFor="Description"
@@ -96,10 +89,7 @@ const AddQuestion = () => {
                             id="url"
                             placeholder="url"
                             value={url}
-                            onChange={(e) => { 
-                                //remove http:// from url
-                              
-                            
+                            onChange={(e) => {
                                 setUrl(e.target.value)
                             }}
                             required
@@ -119,7 +109,7 @@ const AddQuestion = () => {
                             value={solution}
                             onChange={(e) => {
                                 setSolution(e.target.value);
-                             }}
+                            }}
                         />
                         <label
                             htmlFor="Solution"
@@ -134,7 +124,7 @@ const AddQuestion = () => {
                             id="Notes"
                             value={notes}
                             placeholder="Notes"
-                            onChange={(e) => { 
+                            onChange={(e) => {
                                 setNotes(e.target.value)
                             }}
                         />
@@ -148,10 +138,10 @@ const AddQuestion = () => {
                     <div className='relative mb-6 w-full'>
                         <label htmlFor='language' className='text-neutral-600 mt-4'>Language</label>
                         <select id='language' className='bg-gray-50 rounded-md px-4 py-1 mt-2 w-full'
-                        value={language} onChange={(e) => {
-                            setLanguage(e.target.value)
-                        }}>
-                        
+                            value={language} onChange={(e) => {
+                                setLanguage(e.target.value)
+                            }}>
+
                             <option value='javascript'>JavaScript</option>
                             <option value='python'>Python</option>
                             <option value='java'>Java</option>
@@ -168,7 +158,7 @@ const AddQuestion = () => {
                             className="peer m-0 block h-[58px] w-full rounded border border-solid border-neutral-300 bg-white bg-clip-padding py-4 px-3 text-base font-normal leading-tight text-neutral-600 ease-in-out placeholder:text-transparent focus:border-primary focus:bg-white focus:pt-[1.625rem] focus:pb-[0.625rem] focus:text-neutral-700 focus:shadow-te-primary focus:outline-none  [&:not(:placeholder-shown)]:pt-[1.625rem] [&:not(:placeholder-shown)]:pb-[0.625rem]"
                             id="Tags"
                             placeholder="Tags"
-                            onChange={(e) => { 
+                            onChange={(e) => {
                                 setTags(e.target.value)
                             }}
                         />
@@ -180,7 +170,7 @@ const AddQuestion = () => {
                         </label>
                     </div>
                     <button className='bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600 mt-4' type='submit' onClick={
-                       addQuestion
+                        addQuestion
                     }>
                         Submit
                     </button>

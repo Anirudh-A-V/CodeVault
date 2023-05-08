@@ -24,3 +24,78 @@
   background-color: #242424;
   color: rgba(255, 255, 255, 0.87);
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.questions::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #282c34;
+}
+
+.questions::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 5px;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+.questions::-webkit-scrollbar-track {
+  background-color: #282c34;
+}
+
+.questions::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #242424;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+.loader::after {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid;
+  border-color: rgb(21 128 61 / 1) transparent;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
